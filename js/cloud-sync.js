@@ -16,9 +16,9 @@ const CloudSync = (() => {
     
     // Para Firebase
     firebaseConfig: {
-      apiKey: 'YOUR_API_KEY',
-      projectId: 'YOUR_PROJECT_ID',
-      storageBucket: 'YOUR_BUCKET',
+      apiKey: 'AIzaSyB2RLX2XBaBBcIa0-tb_1wP5vz0ChhYM4k',
+      projectId: 'gymtracker-c4622',
+      storageBucket: 'gymtracker-c4622.firebasestorage.app',
     },
     
     // Para Supabase
@@ -169,7 +169,7 @@ const CloudSync = (() => {
   // Para usar Firebase: npm install firebase
   // Descomenta cuando tengas Firebase configurado
 
-  /*
+  
   async function saveToFirebase(userId, userData) {
     try {
       const db = firebase.firestore();
@@ -191,7 +191,7 @@ const CloudSync = (() => {
       return loadFromLocal(userId);
     }
   }
-  */
+  
 
   // ==================== IMPLEMENTACIÓN SUPABASE ====================
   // Para usar Supabase: npm install @supabase/supabase-js

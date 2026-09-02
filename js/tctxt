@@ -1,0 +1,21 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB2RLX2XBaBBcIa0-tb_1wP5vz0ChhYM4k",
+  authDomain: "gymtracker-c4622.firebaseapp.com",
+  projectId: "gymtracker-c4622",
+  storageBucket: "gymtracker-c4622.firebasestorage.app",
+  messagingSenderId: "1064997300971",
+  appId: "1:1064997300971:web:6a25ec1a9e98bf14ce2cae",
+  measurementId: "G-ZT0RC5NRGF"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
