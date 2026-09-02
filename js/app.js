@@ -10,7 +10,21 @@ const App = (() => {
 
   function defaultState(){return {users:[],progress:[],tasks:[],meals:[],workouts:[],settings:{theme:'dark'}}}
   function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState()}catch{return defaultState()}}
-  function saveState(){localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}
+  function saveState(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    // Sincronizar con la nube si está disponible
+    if(typeof CloudSync !== 'undefined' && currentUserId){
+      const userData = {
+        id: currentUserId,
+        ...state.users.find(u=>u.id===currentUserId),
+        progress: state.progress.filter(p=>p.userId===currentUserId),
+        tasks: state.tasks.filter(t=>t.userId===currentUserId),
+        meals: state.meals.filter(m=>m.userId===currentUserId),
+        workouts: state.workouts.filter(w=>w.userId===currentUserId)
+      };
+      CloudSync.saveUserData(currentUserId, userData).catch(e=>console.log('Cloud sync:', e.message));
+    }
+  }
   function currentUser(){return state.users.find(u=>u.id===currentUserId)}
   function byUser(rows){return rows.filter(x=>x.userId===currentUserId)}
   function money(n){return Number(n||0).toLocaleString('es-CR')}
@@ -200,7 +214,27 @@ const App = (() => {
     $('usersList').innerHTML = state.users.map(u=>`<div class="user-card"><div class="avatar">${initials(u.name)}</div><div class="flex-grow-1"><strong>${escapeHtml(u.name)}</strong><span>${u.age} años · ${u.height} cm · ${escapeHtml(u.goal)}</span></div><button class="btn btn-sm btn-outline-primary" onclick="App.selectUser('${u.id}')">Usar</button><button class="btn btn-sm btn-outline-danger" onclick="App.deleteUser('${u.id}')"><i class="bi bi-trash"></i></button></div>`).join('');
   }
 
-  function selectUser(id){currentUserId=id; localStorage.setItem('gymTrackerProCurrentUser', id); renderAll(); toast('Usuario seleccionado','success');}
+  async function selectUser(id){
+    currentUserId = id;
+    localStorage.setItem('gymTrackerProCurrentUser', id);
+    
+    // Intentar sincronizar datos desde la nube
+    if(typeof CloudSync !== 'undefined'){
+      try{
+        const cloudData = await CloudSync.loadUserData(id);
+        if(cloudData){
+          // Mezclar datos de la nube con estado local
+          const user = state.users.find(u=>u.id===id);
+          if(user) Object.assign(user, cloudData.userData || cloudData);
+        }
+      }catch(e){
+        console.log('Sincronización automática no disponible');
+      }
+    }
+    
+    renderAll(); toast('Usuario seleccionado','success');
+  }
+  
   function deleteUser(id){
     if(state.users.length===1){toast('Debe existir al menos un usuario','warning'); return;}
     if(!confirm('¿Eliminar este usuario y toda su información?')) return;
@@ -224,6 +258,11 @@ const App = (() => {
     const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
     const url = URL.createObjectURL(blob); const a = document.createElement('a');
     a.href=url; a.download=`gym-tracker-backup-${today()}.json`; a.click(); URL.revokeObjectURL(url);
+    
+    // Si hay CloudSync disponible, también exportar a la nube
+    if(typeof CloudSync !== 'undefined'){
+      toast('💾 Datos exportados localmente. Configura CloudSync para guardar en la nube.','info');
+    }
   }
   function importData(e){
     const file = e.target.files[0]; if(!file) return;

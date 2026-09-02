@@ -1,0 +1,22 @@
+{
+  "name": "gym-tracker-api",
+  "version": "1.0.0",
+  "description": "Backend API para Gym Tracker Pro",
+  "main": "server-example.js",
+  "scripts": {
+    "start": "node server-example.js",
+    "dev": "nodemon server-example.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["gym", "fitness", "tracker", "api"],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
