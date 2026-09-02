@@ -91,6 +91,8 @@ const CONFIG = {
 };
 ```
 
+
+
 ### Paso 3: Descomentar código Firebase
 En `cloud-sync.js`, descomenta las líneas ~110-127:
 
