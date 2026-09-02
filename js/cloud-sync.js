@@ -9,7 +9,7 @@ const CloudSync = (() => {
   // Cambia estos valores según tu servidor
   const CONFIG = {
     // Tipo de backend: 'local', 'firebase', 'supabase', 'custom'
-    type: 'local', // Comienza en local, cambia a 'firebase', 'supabase' o 'custom'
+    type: 'firebase', // Comienza en local, cambia a 'firebase', 'supabase' o 'custom'
     
     // Para servidor personalizado (REST API)
     apiUrl: 'https://tu-servidor.com/api', // Cambia a tu URL
